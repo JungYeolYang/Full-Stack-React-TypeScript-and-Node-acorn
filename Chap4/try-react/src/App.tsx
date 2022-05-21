@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import Home from "./Home";
-import AnotherScreen from './AnotherScreen';
+import AnotherScreen from "./AnotherScreen";
 import { Switch, Route } from "react-router";
 
 function App() {
