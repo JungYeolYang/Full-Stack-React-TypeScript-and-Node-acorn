@@ -1,13 +1,11 @@
 import React from "react";
 
 interface GreetingProps {
-    message: string
+  message: string;
 }
 
 export default function Greeting(props: GreetingProps) {
-    console.log("rendering Greeting")
+  console.log("rendering Greeting");
 
-    return (<div>
-            {props.message}
-        </div>);    
+  return <div>{props.message}</div>;
 }
