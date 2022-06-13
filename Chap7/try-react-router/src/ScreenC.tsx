@@ -7,6 +7,10 @@ interface ScreenCProps {
   match: any;
 }
 
+interface Params {
+  userid: string;
+}
+
 const ScreenC: FC<ScreenCProps> = (props) => {
   // useEffect(() => {
   //   setTimeout(() => {
@@ -14,7 +18,7 @@ const ScreenC: FC<ScreenCProps> = (props) => {
   //   }, 3000);
   // });
   const history = useHistory();
-  const { userid } = useParams();
+  const { userid } = useParams<Params>();
 
   const onClickGoback = () => {
     // props.history.goBack();

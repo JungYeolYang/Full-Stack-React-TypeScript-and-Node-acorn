@@ -4,7 +4,7 @@ import { PostReducer } from "./PostReducer";
 
 export const rootReducer = combineReducers({
   user: UserReducer,
-  post: PostReducer
+  post: PostReducer,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;
