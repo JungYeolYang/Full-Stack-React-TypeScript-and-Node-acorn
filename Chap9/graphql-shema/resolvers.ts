@@ -1,4 +1,4 @@
-import { IResolvers } from "apollo-server-express";
+import { IResolvers } from "@graphql-tools/utils";
 import { v4 } from "uuid";
 import { GqlContext } from "./GqlContext";
 import { todos } from "./db";
@@ -6,7 +6,7 @@ import { todos } from "./db";
 interface User {
   id: string;
   username: string;
-  email?: string;
+  description?: string;
 }
 
 interface Todo {
@@ -20,7 +20,7 @@ const NEW_TODO = "NEW TODO";
 const resolvers: IResolvers = {
   Query: {
     getUser: async (
-      parent: any,
+      obj: any,
       args: {
         id: string;
       },
@@ -71,7 +71,6 @@ const resolvers: IResolvers = {
         title: args.title,
         description: args.description,
       };
-      console.log("newTodo", newTodo);
       todos.push(newTodo);
       pubsub.publish(NEW_TODO, { newTodo });
       return todos[todos.length - 1];
@@ -80,7 +79,7 @@ const resolvers: IResolvers = {
   Subscription: {
     newTodo: {
       subscribe: (parent, args: null, { pubsub }: GqlContext) =>
-        pubsub.asyncIterator(NEW_TODO),
+        pubsub.asyncIterator([NEW_TODO]),
     },
   },
 };

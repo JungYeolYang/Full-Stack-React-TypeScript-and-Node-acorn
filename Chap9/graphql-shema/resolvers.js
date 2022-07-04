@@ -41,7 +41,7 @@ var db_1 = require("./db");
 var NEW_TODO = "NEW TODO";
 var resolvers = {
     Query: {
-        getUser: function (parent, args, ctx, info) { return __awaiter(void 0, void 0, void 0, function () {
+        getUser: function (obj, args, ctx, info) { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, {
                         id: uuid_1.v4(),
@@ -81,7 +81,6 @@ var resolvers = {
                         title: args.title,
                         description: args.description,
                     };
-                    console.log("newTodo", newTodo);
                     db_1.todos.push(newTodo);
                     pubsub.publish(NEW_TODO, { newTodo: newTodo });
                     return [2 /*return*/, db_1.todos[db_1.todos.length - 1]];
@@ -93,7 +92,7 @@ var resolvers = {
         newTodo: {
             subscribe: function (parent, args, _a) {
                 var pubsub = _a.pubsub;
-                return pubsub.asyncIterator(NEW_TODO);
+                return pubsub.asyncIterator([NEW_TODO]);
             },
         },
     },
