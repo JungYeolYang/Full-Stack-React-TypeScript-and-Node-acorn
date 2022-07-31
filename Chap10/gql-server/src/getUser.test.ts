@@ -1,9 +1,9 @@
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
-import { makeExecutableSchema } from "graphql-tools";
-import faker from "faker";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { addMocksToSchema } from "@graphql-tools/mock";
+import { faker } from "@faker-js/faker";
 import { testGraphQLQuery } from "./testGraphQLQuery";
-import { addMockFunctionsToSchema } from "apollo-server-express";
 
 describe("Testing getting a user", () => {
   const GetUser = `
@@ -32,10 +32,10 @@ describe("Testing getting a user", () => {
     console.log("username", username);
     console.log("email", email);
 
-    addMockFunctionsToSchema({ schema, mocks });
+    const schemaWithMocks = addMocksToSchema({ schema, mocks });
 
     const queryResponse = await testGraphQLQuery({
-      schema,
+      schema: schemaWithMocks,
       source: GetUser,
       variableValues: { id: faker.random.alphaNumeric(20) },
     });
