@@ -7,15 +7,13 @@ import { useDispatch } from "react-redux";
 import { UserProfileSetType } from "../../store/user/Reducer";
 
 const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
-  const [
-    { userName, password, resultMsg, isSubmitDisabled },
-    dispatch,
-  ] = useReducer(userReducer, {
-    userName: "",
-    password: "",
-    resultMsg: "",
-    isSubmitDisabled: true,
-  });
+  const [{ userName, password, resultMsg, isSubmitDisabled }, dispatch] =
+    useReducer(userReducer, {
+      userName: "",
+      password: "",
+      resultMsg: "",
+      isSubmitDisabled: true,
+    });
   const reduxDispatch = useDispatch();
 
   useEffect(() => {

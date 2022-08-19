@@ -13,11 +13,11 @@ import ThreadPointsBar from "../../points/ThreadPointsBar";
 
 const Thread = () => {
   const [thread, setThread] = useState<ThreadModel | undefined>();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     console.log("Thread id", id);
-    if (id && id > 0) {
+    if (id && Number(id) > 0) {
       getThreadById(id).then((th) => {
         setThread(th);
       });

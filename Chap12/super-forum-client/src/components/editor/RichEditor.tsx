@@ -1,8 +1,9 @@
+// @ts-nocheck
 import React, { useState, useCallback, useMemo, useEffect, FC } from "react";
-import { Editable, withReact, useSlate, Slate } from "slate-react";
-import { Editor, Transforms, createEditor, Node } from "slate";
+import { Editable, withReact, useSlate, Slate, ReactEditor } from "slate-react";
+import { Editor, Transforms, createEditor, Node, BaseEditor } from "slate";
 import isHotkey from "is-hotkey";
-import { withHistory } from "slate-history";
+import { withHistory, HistoryEditor } from "slate-history";
 import { Button, Toolbar } from "./RichTextControls";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,6 +18,18 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./RichEditor.css";
 
+// https://docs.slatejs.org/concepts/12-typescript#defining-editor-element-and-text-types
+type CustomElement = { type: "paragraph"; children: CustomText[] };
+type CustomText = { text: string; bold?: true };
+
+declare module "slate" {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor & HistoryEditor;
+    Element: CustomElement;
+    Text: CustomText;
+  }
+}
+
 const HOTKEYS: { [keyName: string]: string } = {
   "mod+b": "bold",
   "mod+i": "italic",
@@ -28,7 +41,7 @@ const initialValue = [
     type: "paragraph",
     children: [{ text: "Enter your post here." }],
   },
-];
+] as CustomElement[];
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
 interface RichEditorProps {
@@ -37,8 +50,8 @@ interface RichEditorProps {
 
 const RichEditor: FC<RichEditorProps> = ({ existingBody }) => {
   const [value, setValue] = useState<Node[]>(initialValue);
-  const renderElement = useCallback((props) => <Element {...props} />, []);
-  const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
+  const renderElement = useCallback((props: any) => <Element {...props} />, []);
+  const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
   useEffect(() => {

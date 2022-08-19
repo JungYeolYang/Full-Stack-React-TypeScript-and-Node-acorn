@@ -1,6 +1,6 @@
-import React, { PropsWithChildren, MutableRefObject } from "react";
+import React, { Ref, PropsWithChildren } from "react";
 import ReactDOM from "react-dom";
-import { cx, css } from "emotion";
+import { cx, css } from "@emotion/css";
 
 interface BaseProps {
   className: string;
@@ -20,10 +20,7 @@ export const Button = React.forwardRef(
         reversed: boolean;
       } & BaseProps
     >,
-    ref:
-      | MutableRefObject<HTMLSpanElement | null>
-      | ((instance: HTMLSpanElement | null) => void)
-      | null
+    ref: Ref<HTMLSpanElement>
   ) => (
     <span
       {...props}
@@ -38,7 +35,7 @@ export const Button = React.forwardRef(
               : "#aaa"
             : active
             ? "black"
-            : "#aaa"};
+            : "#ccc"};
         `
       )}
     />
@@ -56,10 +53,7 @@ export const EditorValue = React.forwardRef(
         value: any;
       } & BaseProps
     >,
-    ref:
-      | MutableRefObject<HTMLDivElement | null>
-      | ((instance: HTMLDivElement | null) => void)
-      | null
+    ref: Ref<HTMLDivElement>
   ) => {
     const textLines = value.document.nodes
       .map((node: any) => node.text)
@@ -105,13 +99,30 @@ export const EditorValue = React.forwardRef(
   }
 );
 
+export const Icon = React.forwardRef(
+  (
+    { className, ...props }: PropsWithChildren<BaseProps>,
+    ref: Ref<HTMLSpanElement>
+  ) => (
+    <span
+      {...props}
+      ref={ref}
+      className={cx(
+        "material-icons",
+        className,
+        css`
+          font-size: 18px;
+          vertical-align: text-bottom;
+        `
+      )}
+    />
+  )
+);
+
 export const Instruction = React.forwardRef(
   (
     { className, ...props }: PropsWithChildren<BaseProps>,
-    ref:
-      | MutableRefObject<HTMLDivElement | null>
-      | ((instance: HTMLDivElement | null) => void)
-      | null
+    ref: Ref<HTMLDivElement>
   ) => (
     <div
       {...props}
@@ -133,10 +144,7 @@ export const Instruction = React.forwardRef(
 export const Menu = React.forwardRef(
   (
     { className, ...props }: PropsWithChildren<BaseProps>,
-    ref:
-      | MutableRefObject<HTMLDivElement | null>
-      | ((instance: HTMLDivElement | null) => void)
-      | null
+    ref: Ref<HTMLDivElement>
   ) => (
     <div
       {...props}
@@ -147,7 +155,6 @@ export const Menu = React.forwardRef(
           & > * {
             display: inline-block;
           }
-
           & > * + * {
             margin-left: 15px;
           }
@@ -157,17 +164,16 @@ export const Menu = React.forwardRef(
   )
 );
 
-export const Portal = ({ children }: { children: React.ReactNode }) => {
-  return ReactDOM.createPortal(children, document.body);
+export const Portal = ({ children }: any) => {
+  return typeof document === "object"
+    ? ReactDOM.createPortal(children, document.body)
+    : null;
 };
 
 export const Toolbar = React.forwardRef(
   (
     { className, ...props }: PropsWithChildren<BaseProps>,
-    ref:
-      | MutableRefObject<HTMLDivElement | null>
-      | ((instance: HTMLDivElement | null) => void)
-      | null
+    ref: Ref<HTMLDivElement>
   ) => (
     <Menu
       {...props}

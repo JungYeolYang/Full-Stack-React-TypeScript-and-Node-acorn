@@ -5,7 +5,7 @@ import ThreadCard from "./ThreadCard";
 import { getThreadsByCategory } from "../../../services/DataService";
 import Category from "../../../models/Category";
 const Main = () => {
-  const { categoryId } = useParams();
+  const { categoryId } = useParams<{ categoryId: string }>();
   const [category, setCategory] = useState<Category | undefined>();
   const [threadCards, setThreadCards] = useState<Array<JSX.Element> | null>(
     null
@@ -14,7 +14,7 @@ const Main = () => {
   useEffect(() => {
     console.log("main categoryId", categoryId);
 
-    if (categoryId && categoryId > 0) {
+    if (categoryId && Number(categoryId) > 0) {
       getThreadsByCategory(categoryId).then((threads) => {
         const cards = threads.map((th) => {
           return <ThreadCard key={`thread-${th.id}`} thread={th} />;
