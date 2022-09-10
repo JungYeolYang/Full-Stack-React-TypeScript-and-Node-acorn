@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Thread } from "./Thread";
 import { Auditable } from "./Auditable";
+import { Thread } from "./Thread";
 
 @Entity({ name: "ThreadCategories" })
 export class ThreadCategory extends Auditable {
-  @PrimaryGeneratedColumn({ name: "Id", type: "bigint" }) // for typeorm
+  @PrimaryGeneratedColumn({ name: "Id", type: "bigint" }) // typeorm용
   id: string;
 
   @Column("varchar", {

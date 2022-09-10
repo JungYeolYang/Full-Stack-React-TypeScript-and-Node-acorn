@@ -14,6 +14,7 @@ export const createThread = async (
   body: string
 ): Promise<QueryOneResult<Thread>> => {
   const titleMsg = isThreadTitleValid(title);
+
   if (titleMsg) {
     return {
       messages: [titleMsg],
@@ -32,18 +33,24 @@ export const createThread = async (
       messages: ["User not logged in."],
     };
   }
+
   const user = await User.findOne({
-    id: userId,
+    where: {
+      id: userId,
+    },
   });
 
   const category = await ThreadCategory.findOne({
-    id: categoryId,
+    where: {
+      id: categoryId,
+    },
   });
   if (!category) {
     return {
       messages: ["category not found."],
     };
   }
+
   const thread = await Thread.create({
     title,
     body,
