@@ -59,7 +59,7 @@ const apolloServer = new ApolloServer({
 });
 
 apolloServer.start().then(() => {
-  apolloServer.applyMiddleware({ app, cors: true });
+  apolloServer.applyMiddleware({ app, cors: false });
   httpServer.listen({ port: 8000 }, () => {
     console.log("GraphQL server ready.");
   });

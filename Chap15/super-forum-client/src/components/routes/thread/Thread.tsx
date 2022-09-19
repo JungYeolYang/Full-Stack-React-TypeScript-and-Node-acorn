@@ -25,7 +25,6 @@ const GetThreadById = gql`
       ... on EntityResult {
         messages
       }
-
       ... on Thread {
         id
         user {
@@ -99,25 +98,23 @@ const Thread = () => {
     { fetchPolicy: "no-cache" }
   );
   const [thread, setThread] = useState<ThreadModel | undefined>();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [readOnly, setReadOnly] = useState(false);
   const user = useSelector((state: AppState) => state.user);
-  const [
-    { userId, category, title, bodyNode },
-    threadReducerDispatch,
-  ] = useReducer(threadReducer, {
-    userId: user ? user.id : "0",
-    category: undefined,
-    title: "",
-    body: "",
-    bodyNode: undefined,
-  });
+  const [{ userId, category, title, bodyNode }, threadReducerDispatch] =
+    useReducer(threadReducer, {
+      userId: user ? user.id : "0",
+      category: undefined,
+      title: "",
+      body: "",
+      bodyNode: undefined,
+    });
   const [postMsg, setPostMsg] = useState("");
   const [execCreateThread] = useMutation(CreateThread);
   const history = useHistory();
 
   const refreshThread = () => {
-    if (id && id > 0) {
+    if (id && Number(id) > 0) {
       execGetThreadById({
         variables: {
           id,
@@ -127,7 +124,7 @@ const Thread = () => {
   };
 
   useEffect(() => {
-    if (id && id > 0) {
+    if (id && Number(id) > 0) {
       execGetThreadById({
         variables: {
           id,

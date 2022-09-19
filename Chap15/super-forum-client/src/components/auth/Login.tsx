@@ -20,15 +20,13 @@ const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
       },
     ],
   });
-  const [
-    { userName, password, resultMsg, isSubmitDisabled },
-    dispatch,
-  ] = useReducer(userReducer, {
-    userName: "test1",
-    password: "Test123$%^",
-    resultMsg: "",
-    isSubmitDisabled: false,
-  });
+  const [{ userName, password, resultMsg, isSubmitDisabled }, dispatch] =
+    useReducer(userReducer, {
+      userName: "test1",
+      password: "Test123$%^",
+      resultMsg: "",
+      isSubmitDisabled: false,
+    });
   const { execMe, updateMe } = useRefreshReduxMe();
 
   const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,35 +1,29 @@
-import { IResolvers } from "apollo-server-express";
+import { IResolvers } from "@graphql-tools/utils";
 import CategoryThread from "../repo/CategoryThread";
 import { getTopCategoryThread } from "../repo/CategoryThreadRepo";
-import { QueryArrayResult, QueryOneResult } from "../repo/QueryArrayResult";
+import { GqlContext } from "./GqlContext";
 import { Thread } from "../repo/Thread";
-import { ThreadCategory } from "../repo/ThreadCategory";
-import { getAllCategories } from "../repo/ThreadCategoryRepo";
-import { ThreadItem } from "../repo/ThreadItem";
-import { updateThreadItemPoint } from "../repo/ThreadItemPointRepo";
+import { QueryOneResult, QueryArrayResult } from "../repo/QueryArrayResult";
 import {
-  createThreadItem,
-  getThreadItemsByThreadId,
-} from "../repo/ThreadItemRepo";
-import { updateThreadPoint } from "../repo/ThreadPointRepo";
-import {
-  createThread,
   getThreadById,
+  createThread,
   getThreadsByCategoryId,
   getThreadsLatest,
 } from "../repo/ThreadRepo";
+import { updateThreadPoint } from "../repo/ThreadPointRepo";
+import { updateThreadItemPoint } from "../repo/ThreadItemPointRepo";
+import { ThreadCategory } from "../repo/ThreadCategory";
+import { getAllCategories } from "../repo/ThreadCategoryRepo";
 import { User } from "../repo/User";
 import {
-  changePassword,
-  login,
-  logout,
-  me,
   register,
   UserResult,
+  login,
+  logout,
+  changePassword,
+  me,
 } from "../repo/UserRepo";
-import { GqlContext } from "./GqlContext";
 
-const STANDARD_ERROR = "An error has occurred";
 interface EntityResult {
   messages: Array<string>;
 }
@@ -50,28 +44,12 @@ const resolvers: IResolvers = {
       return "Thread";
     },
   },
-  ThreadItemResult: {
-    __resolveType(obj: any, context: GqlContext, info: any) {
-      if (obj.messages) {
-        return "EntityResult";
-      }
-      return "ThreadItem";
-    },
-  },
   ThreadArrayResult: {
     __resolveType(obj: any, context: GqlContext, info: any) {
       if (obj.messages) {
         return "EntityResult";
       }
       return "ThreadArray";
-    },
-  },
-  ThreadItemArrayResult: {
-    __resolveType(obj: any, context: GqlContext, info: any) {
-      if (obj.messages) {
-        return "EntityResult";
-      }
-      return "ThreadItemArray";
     },
   },
   Query: {
@@ -84,15 +62,13 @@ const resolvers: IResolvers = {
       let thread: QueryOneResult<Thread>;
       try {
         thread = await getThreadById(args.id);
-
         if (thread.entity) {
           return thread.entity;
         }
         return {
-          messages: thread.messages ? thread.messages : [STANDARD_ERROR],
+          messages: thread.messages ? thread.messages : ["test"],
         };
       } catch (ex) {
-        console.log(ex.message);
         throw ex;
       }
     },
@@ -111,7 +87,9 @@ const resolvers: IResolvers = {
           };
         }
         return {
-          messages: threads.messages ? threads.messages : [STANDARD_ERROR],
+          messages: threads.messages
+            ? threads.messages
+            : ["An error has occurred"],
         };
       } catch (ex) {
         throw ex;
@@ -132,30 +110,9 @@ const resolvers: IResolvers = {
           };
         }
         return {
-          messages: threads.messages ? threads.messages : [STANDARD_ERROR],
-        };
-      } catch (ex) {
-        throw ex;
-      }
-    },
-    getThreadItemByThreadId: async (
-      obj: any,
-      args: { threadId: string },
-      ctx: GqlContext,
-      info: any
-    ): Promise<{ threadItems: Array<ThreadItem> } | EntityResult> => {
-      let threadItems: QueryArrayResult<ThreadItem>;
-      try {
-        threadItems = await getThreadItemsByThreadId(args.threadId);
-        if (threadItems.entities) {
-          return {
-            threadItems: threadItems.entities,
-          };
-        }
-        return {
-          messages: threadItems.messages
-            ? threadItems.messages
-            : [STANDARD_ERROR],
+          messages: threads.messages
+            ? threads.messages
+            : ["An error has occurred"],
         };
       } catch (ex) {
         throw ex;
@@ -176,7 +133,7 @@ const resolvers: IResolvers = {
         return {
           messages: categories.messages
             ? categories.messages
-            : [STANDARD_ERROR],
+            : ["An error has occurred"],
         };
       } catch (ex) {
         throw ex;
@@ -200,7 +157,7 @@ const resolvers: IResolvers = {
           return user.user;
         }
         return {
-          messages: user.messages ? user.messages : [STANDARD_ERROR],
+          messages: user.messages ? user.messages : ["An error has occurred"],
         };
       } catch (ex) {
         throw ex;
@@ -236,24 +193,9 @@ const resolvers: IResolvers = {
           args.body
         );
         return {
-          messages: result.messages ? result.messages : [STANDARD_ERROR],
-        };
-      } catch (ex) {
-        console.log(ex);
-        throw ex;
-      }
-    },
-    createThreadItem: async (
-      obj: any,
-      args: { userId: string; threadId: string; body: string },
-      ctx: GqlContext,
-      info: any
-    ): Promise<EntityResult> => {
-      let result: QueryOneResult<ThreadItem>;
-      try {
-        result = await createThreadItem(args.userId, args.threadId, args.body);
-        return {
-          messages: result.messages ? result.messages : [STANDARD_ERROR],
+          messages: result.messages
+            ? result.messages
+            : ["An error has occurred"],
         };
       } catch (ex) {
         console.log(ex);
@@ -262,7 +204,7 @@ const resolvers: IResolvers = {
     },
     updateThreadPoint: async (
       obj: any,
-      args: { threadId: string; increment: boolean },
+      args: { userId: string; threadId: string; increment: boolean },
       ctx: GqlContext,
       info: any
     ): Promise<string> => {
@@ -273,6 +215,7 @@ const resolvers: IResolvers = {
         }
         result = await updateThreadPoint(
           ctx.req.session!.userId,
+          args.userId,
           args.threadId,
           args.increment
         );
@@ -314,7 +257,9 @@ const resolvers: IResolvers = {
         if (user && user.user) {
           return "Registration successful.";
         }
-        return user && user.messages ? user.messages[0] : STANDARD_ERROR;
+        return user && user.messages
+          ? user.messages[0]
+          : "An error has occurred";
       } catch (ex) {
         throw ex;
       }
@@ -333,7 +278,9 @@ const resolvers: IResolvers = {
 
           return `Login successful for userId ${ctx.req.session!.userId}.`;
         }
-        return user && user.messages ? user.messages[0] : STANDARD_ERROR;
+        return user && user.messages
+          ? user.messages[0]
+          : "An error has occurred";
       } catch (ex) {
         console.log(ex.message);
         throw ex;
@@ -381,5 +328,4 @@ const resolvers: IResolvers = {
     },
   },
 };
-
 export default resolvers;
