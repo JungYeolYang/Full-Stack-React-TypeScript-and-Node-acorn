@@ -287,6 +287,7 @@ const Thread = () => {
             lastModifiedOn={new Date()}
             points={0}
             readOnly={false}
+            userId={user ? user.id : "0"}
             threadItemId={"0"}
             threadId={thread.id}
             refreshThread={refreshThread}

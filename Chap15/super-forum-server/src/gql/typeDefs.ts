@@ -88,8 +88,9 @@ const typeDefs = gql`
       title: String!
       body: String!
     ): EntityResult
+    createThreadItem(userId: ID!, threadId: ID!, body: String): EntityResult
     register(email: String!, userName: String!, password: String!): String!
-    updateThreadPoint(userId: ID!, threadId: ID!, increment: Boolean!): String!
+    updateThreadPoint(threadId: ID!, increment: Boolean!): String!
     updateThreadItemPoint(threadItemId: ID!, increment: Boolean!): String!
     login(userName: String!, password: String!): String!
     logout(userName: String!): String!

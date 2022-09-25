@@ -87,7 +87,6 @@ const Main = () => {
   const history = useHistory();
 
   useEffect(() => {
-    console.info(categoryId);
     if (categoryId && Number(categoryId) > 0) {
       execGetThreadsByCat({
         variables: {

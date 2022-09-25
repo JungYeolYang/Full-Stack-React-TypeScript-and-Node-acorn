@@ -43,7 +43,7 @@ const HOTKEYS: { [keyName: string]: string } = {
 const initialValue = [
   {
     type: "paragraph",
-    children: [{ text: "Enter your post here." }],
+    children: [{ text: "" }],
   },
 ] as CustomElement[];
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
@@ -66,14 +66,9 @@ const RichEditor: FC<RichEditorProps> = ({
 
   useEffect(() => {
     if (existingBody) {
-      setValue([
-        {
-          type: "paragraph",
-          text: existingBody,
-        },
-      ]);
+      setValue(JSON.parse(existingBody));
     }
-  }, []);
+  }, [existingBody]);
 
   const onChangeEditorValue = (val: Node[]) => {
     setValue(val);
@@ -98,7 +93,7 @@ const RichEditor: FC<RichEditorProps> = ({
         className="editor"
         renderElement={renderElement}
         renderLeaf={renderLeaf}
-        placeholder="Enter some rich text…"
+        placeholder="Enter your post here."
         spellCheck
         autoFocus
         onKeyDown={(event) => {

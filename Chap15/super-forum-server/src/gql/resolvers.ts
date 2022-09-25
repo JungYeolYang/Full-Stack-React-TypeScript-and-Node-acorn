@@ -10,6 +10,8 @@ import {
   getThreadsByCategoryId,
   getThreadsLatest,
 } from "../repo/ThreadRepo";
+import { ThreadItem } from "../repo/ThreadItem";
+import { createThreadItem } from "../repo/ThreadItemRepo";
 import { updateThreadPoint } from "../repo/ThreadPointRepo";
 import { updateThreadItemPoint } from "../repo/ThreadItemPointRepo";
 import { ThreadCategory } from "../repo/ThreadCategory";
@@ -202,9 +204,28 @@ const resolvers: IResolvers = {
         throw ex;
       }
     },
+    createThreadItem: async (
+      obj: any,
+      args: { userId: string; threadId: string; body: string },
+      ctx: GqlContext,
+      info: any
+    ): Promise<EntityResult> => {
+      let result: QueryOneResult<ThreadItem>;
+      try {
+        result = await createThreadItem(args.userId, args.threadId, args.body);
+        return {
+          messages: result.messages
+            ? result.messages
+            : ["An error has occurred"],
+        };
+      } catch (ex) {
+        console.log(ex);
+        throw ex;
+      }
+    },
     updateThreadPoint: async (
       obj: any,
-      args: { userId: string; threadId: string; increment: boolean },
+      args: { threadId: string; increment: boolean },
       ctx: GqlContext,
       info: any
     ): Promise<string> => {
@@ -215,7 +236,6 @@ const resolvers: IResolvers = {
         }
         result = await updateThreadPoint(
           ctx.req.session!.userId,
-          args.userId,
           args.threadId,
           args.increment
         );
