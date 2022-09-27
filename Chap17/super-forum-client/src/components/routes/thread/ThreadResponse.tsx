@@ -18,6 +18,7 @@ const CreateThreadItem = gql`
 interface ThreadResponseProps {
   body?: string;
   userName?: string;
+  userId: string;
   lastModifiedOn?: Date;
   points: number;
   readOnly: boolean;
@@ -29,6 +30,7 @@ interface ThreadResponseProps {
 const ThreadResponse: FC<ThreadResponseProps> = ({
   body,
   userName,
+  userId,
   lastModifiedOn,
   points,
   readOnly,

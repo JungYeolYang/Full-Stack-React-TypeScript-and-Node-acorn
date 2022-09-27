@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { getManager } from "typeorm";
 import { ThreadItem } from "./ThreadItem";
 import { ThreadItemPoint } from "./ThreadItemPoint";

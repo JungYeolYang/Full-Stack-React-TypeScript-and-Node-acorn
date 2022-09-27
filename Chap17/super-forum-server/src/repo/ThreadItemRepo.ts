@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { isThreadBodyValid } from "../common/validators/ThreadValidators";
 import { QueryArrayResult, QueryOneResult } from "./QueryArrayResult";
 import { ThreadItem } from "./ThreadItem";
@@ -23,11 +24,15 @@ export const createThreadItem = async (
     };
   }
   const user = await User.findOne({
-    id: userId,
+    where: {
+      id: userId,
+    },
   });
 
   const thread = await Thread.findOne({
-    id: threadId,
+    where: {
+      id: threadId,
+    },
   });
   if (!thread) {
     return {

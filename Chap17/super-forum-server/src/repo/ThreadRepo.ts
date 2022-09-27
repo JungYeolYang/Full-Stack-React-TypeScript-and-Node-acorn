@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {
   isThreadBodyValid,
   isThreadTitleValid,
@@ -34,11 +35,15 @@ export const createThread = async (
     };
   }
   const user = await User.findOne({
-    id: userId,
+    where: {
+      id: userId,
+    },
   });
 
   const category = await ThreadCategory.findOne({
-    id: categoryId,
+    where: {
+      id: categoryId,
+    },
   });
   if (!category) {
     return {

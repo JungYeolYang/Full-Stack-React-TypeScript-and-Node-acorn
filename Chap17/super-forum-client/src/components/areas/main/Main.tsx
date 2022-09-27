@@ -11,7 +11,6 @@ const GetThreadsByCategoryId = gql`
       ... on EntityResult {
         messages
       }
-
       ... on ThreadArray {
         threads {
           id
@@ -40,7 +39,6 @@ const GetThreadsLatest = gql`
       ... on EntityResult {
         messages
       }
-
       ... on ThreadArray {
         threads {
           id
@@ -81,7 +79,7 @@ const Main = () => {
       data: threadsLatestData,
     },
   ] = useLazyQuery(GetThreadsLatest);
-  const { categoryId } = useParams();
+  const { categoryId } = useParams<{ categoryId: string }>();
   const [category, setCategory] = useState<Category | undefined>();
   const [threadCards, setThreadCards] = useState<Array<JSX.Element> | null>(
     null
@@ -89,7 +87,7 @@ const Main = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (categoryId && categoryId > 0) {
+    if (categoryId && Number(categoryId) > 0) {
       execGetThreadsByCat({
         variables: {
           categoryId,
@@ -142,6 +140,8 @@ const Main = () => {
   const onClickPostThread = () => {
     history.push("/thread");
   };
+
+  console.info(threadsByCatData);
 
   return (
     <main className="content">

@@ -19,9 +19,9 @@ const Registration: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
     { userName, password, email, passwordConfirm, resultMsg, isSubmitDisabled },
     dispatch,
   ] = useReducer(userReducer, {
-    userName: "",
+    userName: "davec",
     password: "",
-    email: "",
+    email: "admin@dzhaven.com",
     passwordConfirm: "",
     resultMsg: "",
     isSubmitDisabled: true,
@@ -43,7 +43,6 @@ const Registration: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-
     try {
       const result = await execRegister({
         variables: {
