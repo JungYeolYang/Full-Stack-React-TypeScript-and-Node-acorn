@@ -8,6 +8,7 @@ import configureStore from "./store/configureStore";
 import ErrorBoundary from "./components/ErrorBoundary";
 import reportWebVitals from "./reportWebVitals";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import ReactModal from "react-modal";
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GQL_URL,
@@ -31,6 +32,8 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
+
+ReactModal.setAppElement("#root");
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
